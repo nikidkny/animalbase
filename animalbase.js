@@ -11,6 +11,7 @@ const Animal = {
   type: "",
   age: 0,
 };
+const settings = { filter: "all", sortBy: "name", sortDir: "asc" };
 
 function start() {
   console.log("ready");
@@ -57,14 +58,19 @@ function preapareObject(jsonObject) {
 function selectFilter(event) {
   const filter = event.target.dataset.filter;
   console.log(`Selected filtering option: ${filter}`);
-  filteringList(filter);
+  //filteringList(filter);
+  setFilter(filter);
 }
-function filteringList(filterBy) {
-  let filteredList = allAnimals;
-  if (filterBy === "cat") {
+function setFilter(filter) {
+  settings.filterBy = filter;
+  buildList();
+}
+function filteringList(filteredList) {
+  //let filteredList = allAnimals;
+  if (settings.filterBy === "cat") {
     //filtered list on cats
     filteredList = allAnimals.filter(isCat);
-  } else if (filterBy === "dog") {
+  } else if (settings.filterBy === "dog") {
     filteredList = allAnimals.filter(isDog);
   }
   //create a filtered list of only one type// hardcode
@@ -73,7 +79,7 @@ function filteringList(filterBy) {
   //create a filtered list of on the other type//hardcode
   // const filteredList = allAnimals.filter(isDog);
   // displayList(filteredList);
-  displayList(filteredList);
+  return filteredList;
 }
 function isCat(animal) {
   return animal.type === "cat";
@@ -105,16 +111,22 @@ function selectSort(event) {
     event.target.dataset.sortDirection = "asc;";
   }
   console.log(`Selected filtering option: ${sortBy} - ${sortDir}`);
-  sortingList(sortBy, sortDir);
+  setSort(sortBy, sortDir);
 }
-function sortingList(sortBy, sortDir) {
-  let sortedList = allAnimals;
+function setSort(sortBy, sortDir) {
+  settings.sortBy = sortBy;
+  settings.sortDir = sortDir;
+  buildList();
+}
+function sortingList(sortedList) {
+  //we don't need the next line as we made it a global variable
+  //let sortedList = allAnimals;
   // setting a direction
   let direction = 1;
-  if (sortDir === "desc") {
+  if (settings.sortDir === "desc") {
     direction = -1;
   } else {
-    direction = 1;
+    settings.direction = 1;
   }
   // if (sortBy === "name") {
   //   sortedList = sortedList.sort(sortByName);
@@ -129,13 +141,13 @@ function sortingList(sortBy, sortDir) {
   sortedList = sortedList.sort(sortByProperty);
   // and the function is moved inside the function//closoure
   function sortByProperty(animalA, animalB) {
-    if (animalA[sortBy] < animalB[sortBy]) {
+    if (animalA[settings.sortBy] < animalB[settings.sortBy]) {
       return -1 * direction;
     } else {
       return 1 * direction;
     }
   }
-  displayList(sortedList);
+  return sortedList;
 }
 // after making it generic the following is not needed anymore
 //instead the line 115 function is renamed to a generic sorting name
@@ -160,6 +172,11 @@ function sortingList(sortBy, sortDir) {
 //     return 1;
 //   }
 // }
+function buildList() {
+  const currentList = filteringList(allAnimals);
+  const sortedList = sortingList(currentList);
+  displayList(sortedList);
+}
 function displayList(animals) {
   // clear the list
   document.querySelector("#list tbody").innerHTML = "";
