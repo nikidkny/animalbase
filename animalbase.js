@@ -23,6 +23,9 @@ function registerButtons() {
   document
     .querySelectorAll("[data-action='filter']")
     .forEach((button) => button.addEventListener("click", selectFilter));
+  document
+    .querySelectorAll("[data-action='sort']")
+    .forEach((button) => button.addEventListener("click", selectSort));
 }
 
 async function loadJSON() {
@@ -90,6 +93,51 @@ function isDog(animal) {
   //     return false
   //   }
 }
+function selectSort(event) {
+  const sort = event.target.dataset.sort;
+  console.log(`Selected filtering option: ${sort}`);
+  sortingList(sort);
+}
+function sortingList(sortBy) {
+  let sortedList = allAnimals;
+  if (sortBy === "name") {
+    sortedList = sortedList.sort(sortByName);
+  } else if (sortBy === "type") {
+    sortedList = sortedList.sort(sortByType);
+  }
+  //  else if (sortBy === "desc") {
+  //   sortedList = sortedList.sort(sortByDesc);
+  // }
+  displayList(sortedList);
+}
+function sortByName(animalA, animalB) {
+  if (animalA.name < animalB.name) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+function sortByType(animalA, animalB) {
+  if (animalA.type < animalB.type) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+// function sortByDesc(animalA, animalB) {
+//   if (animalA.desc < animalB.desc) {
+//     return -1;
+//   } else {
+//     return 1;
+//   }
+// }
+// function sortByAge(animalA, animalB) {
+//   if (animalA.age < animalB.age) {
+//     return -1;
+//   } else {
+//     return 1;
+//   }
+// }
 function displayList(animals) {
   // clear the list
   document.querySelector("#list tbody").innerHTML = "";
