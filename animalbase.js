@@ -94,36 +94,58 @@ function isDog(animal) {
   //   }
 }
 function selectSort(event) {
-  const sort = event.target.dataset.sort;
-  console.log(`Selected filtering option: ${sort}`);
-  sortingList(sort);
-}
-function sortingList(sortBy) {
-  let sortedList = allAnimals;
-  if (sortBy === "name") {
-    sortedList = sortedList.sort(sortByName);
-  } else if (sortBy === "type") {
-    sortedList = sortedList.sort(sortByType);
+  const sortBy = event.target.dataset.sort;
+  //looks at the direction //data-sort-direction="asc"// in html and then sortby that direction
+  const sortDir = event.target.dataset.sortDirection;
+
+  // toggle the direction of sorting
+  if (sortDir === "asc") {
+    event.target.dataset.sortDirection = "desc";
+  } else {
+    event.target.dataset.sortDirection = "asc;";
   }
-  //  else if (sortBy === "desc") {
+  console.log(`Selected filtering option: ${sortBy} - ${sortDir}`);
+  sortingList(sortBy, sortDir);
+}
+function sortingList(sortBy, sortDir) {
+  let sortedList = allAnimals;
+  // setting a direction
+  let direction = 1;
+  if (sortDir === "desc") {
+    direction = -1;
+  } else {
+    direction = 1;
+  }
+  // if (sortBy === "name") {
+  //   sortedList = sortedList.sort(sortByName);
+  // } else if (sortBy === "type") {
+  //   sortedList = sortedList.sort(sortByType);
+  // } else if (sortBy === "desc") {
   //   sortedList = sortedList.sort(sortByDesc);
+  // } else if (sortBy === "age") {
+  //   sortedList = sortedList.sort(sortByAge);
   // }
+  //to make it generic from the above the only thing that stays is this
+  sortedList = sortedList.sort(sortByProperty);
+  // and the function is moved inside the function//closoure
+  function sortByProperty(animalA, animalB) {
+    if (animalA[sortBy] < animalB[sortBy]) {
+      return -1 * direction;
+    } else {
+      return 1 * direction;
+    }
+  }
   displayList(sortedList);
 }
-function sortByName(animalA, animalB) {
-  if (animalA.name < animalB.name) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
-function sortByType(animalA, animalB) {
-  if (animalA.type < animalB.type) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
+// after making it generic the following is not needed anymore
+//instead the line 115 function is renamed to a generic sorting name
+// function sortByType(animalA, animalB) {
+//   if (animalA.type < animalB.type) {
+//     return -1;
+//   } else {
+//     return 1;
+//   }
+// }
 // function sortByDesc(animalA, animalB) {
 //   if (animalA.desc < animalB.desc) {
 //     return -1;
