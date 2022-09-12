@@ -1,0 +1,17 @@
+Filtering 
+-try hardcoded filter - only one type
+- try different filter
+- filter either type one or type two ( in this case cor or dog)
+- add user interactivity
+- add the last filter  
+- add some cleanup
+Sorting
+-try hardcoded sorting - only one type
+- try different sorting
+- add user interactivity
+- add a generic sorting  
+- change sorting-direction
+-add some cleanup
+
+Combinning Filtering and Sorting
+-fixes
